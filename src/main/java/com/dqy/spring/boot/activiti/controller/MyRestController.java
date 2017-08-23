@@ -60,7 +60,6 @@ public class MyRestController {
 	}
 
 	static class StartProcessRepresentation {
-
 		private String assignee;
 
 		public String getAssignee() {
