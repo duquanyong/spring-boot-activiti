@@ -10,18 +10,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSON;
 import com.dqy.spring.boot.activiti.service.MyService;
+import com.fasterxml.jackson.core.JsonParser;
+import net.minidev.json.parser.JSONParser;
 
+@RestController
 public class MyRestController {
 	@Autowired
 	private MyService myService;
 
 	@RequestMapping(value = "/process", method = RequestMethod.POST)
-	public void startProcessInstance(@RequestBody StartProcessRepresentation startProcessRepresentation) {
+	public String startProcessInstance(@RequestBody StartProcessRepresentation startProcessRepresentation) {
 		myService.startProcess(startProcessRepresentation.getAssignee());
+		return "success";
 	}
-
+	@RequestMapping(value = "/test", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,consumes= MediaType.APPLICATION_JSON_VALUE)
+	public String test() {
+		return "success";
+	}
 	@RequestMapping(value = "/tasks", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<TaskRepresentation> getTasks(@RequestParam String assignee) {
 		List<Task> tasks = myService.getTasks(assignee);
@@ -70,4 +79,11 @@ public class MyRestController {
 			this.assignee = assignee;
 		}
 	}
+	
+	public static void main(String args[]) {
+		StartProcessRepresentation s = new StartProcessRepresentation();
+		s.setAssignee("Joram");
+		System.out.println(JSON.toJSONString(s));
+	}
+	
 }
